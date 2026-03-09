@@ -25,11 +25,3 @@ class Counter:
     def get_value(self):
         return self.value
 
-c = Counter(start=5)
-c.increment()
-c.increment()
-print(c.get_value())  # 7
-c.reset()
-print(c.get_value())  # 5 (вернулись к начальному)
-
-print(c)

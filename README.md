@@ -4,61 +4,64 @@
 
 ---
 
-## Задача 1: Первый класс — Счётчик
+## Задача 1: Счётчик
 
 ### Уровень сложности: 1/10
 
 ### Изучаемые концепции
-- Создание класса с ключевым словом `class`
+- Создание класса с помощью `class`
 - Метод `__init__` (конструктор)
-- Атрибуты экземпляра (`self`)
+- Атрибуты экземпляра
 - Методы экземпляра
+- Ключевое слово `self`
 
-### Подробное условие
+### Условие
 
 Создайте класс `Counter`, который представляет простой счётчик.
 
 **Технические требования:**
-1. Метод `__init__` должен принимать необязательный параметр `start` (начальное значение, по умолчанию 0)
+
+1. Метод `__init__` должен принимать необязательный параметр `start` (начальное значение счётчика, по умолчанию 0)
 2. Атрибут `value` хранит текущее значение счётчика
-3. Метод `increment()` увеличивает значение на 1
-4. Метод `decrement()` уменьшает значение на 1
-5. Метод `reset()` сбрасывает значение к начальному
+3. Метод `increment()` увеличивает счётчик на 1
+4. Метод `decrement()` уменьшает счётчик на 1
+5. Метод `reset()` сбрасывает счётчик к начальному значению (которое было передано в `__init__`)
 6. Метод `get_value()` возвращает текущее значение
 
-**Файл для решения:** `counter.py`
+**Файл для сдачи:** `counter.py`
 
 ### Примеры использования
 
 ```python
-# Пример 1: Базовое использование
-c = Counter()
-print(c.get_value())  # 0
-c.increment()
-c.increment()
-print(c.get_value())  # 2
+# Пример 1: Создание счётчика с начальным значением по умолчанию
+counter = Counter()
+print(counter.get_value())  # Вывод: 0
 
-# Пример 2: Начальное значение
-c = Counter(start=10)
-print(c.get_value())  # 10
-c.decrement()
-print(c.get_value())  # 9
+# Пример 2: Увеличение и уменьшение
+counter = Counter(10)
+counter.increment()
+counter.increment()
+print(counter.get_value())  # Вывод: 12
+counter.decrement()
+print(counter.get_value())  # Вывод: 11
 
-# Пример 3: Сброс счётчика
-c = Counter(start=5)
-c.increment()
-c.increment()
-print(c.get_value())  # 7
-c.reset()
-print(c.get_value())  # 5 (вернулись к начальному)
+# Пример 3: Сброс к начальному значению
+counter = Counter(5)
+counter.increment()
+counter.increment()
+counter.increment()
+print(counter.get_value())  # Вывод: 8
+counter.reset()
+print(counter.get_value())  # Вывод: 5
 ```
 
 ### Дополнительные задания
-1. Добавьте метод `increment_by(n)`, который увеличивает значение на `n`
-2. Добавьте проверку: значение не может стать отрицательным (при попытке — остаётся 0)
-3. Добавьте метод `__str__`, чтобы `print(c)` выводил `"Counter: 5"`
 
-### Полезные ссылки для самостоятельного изучения
+1. **Шаг изменения**: Добавьте параметр `step` в `__init__`, чтобы `increment()` и `decrement()` изменяли значение на указанный шаг (по умолчанию 1)
+2. **Ограничения**: Добавьте параметры `min_value` и `max_value` (по умолчанию `None`), чтобы счётчик не выходил за границы
+3. **История**: Добавьте метод `get_history()`, возвращающий список всех значений счётчика (включая начальное)
+
+### Полезные ссылки для изучения
 - "Python class __init__ method"
 - "Python self keyword explained"
 - "Python instance attributes vs class attributes"
@@ -66,113 +69,7 @@ print(c.get_value())  # 5 (вернулись к начальному)
 
 ---
 
-### Файл автотестов: `test_counter.py`
-
-```python
-"""
-Автотесты для задачи 1: Счётчик
-Запуск: python -m pytest test_counter.py -v
-Или без pytest: python test_counter.py
-"""
-
-import unittest
-from counter import Counter
-
-
-class TestCounter(unittest.TestCase):
-    """Тесты для класса Counter"""
-    
-    def test_create_default_counter(self):
-        """Создание счётчика с начальным значением по умолчанию"""
-        c = Counter()
-        self.assertEqual(c.get_value(), 0)
-    
-    def test_create_counter_with_start_value(self):
-        """Создание счётчика с заданным начальным значением"""
-        c = Counter(start=10)
-        self.assertEqual(c.get_value(), 10)
-        
-        c2 = Counter(start=-5)
-        self.assertEqual(c2.get_value(), -5)
-    
-    def test_increment(self):
-        """Метод increment увеличивает значение на 1"""
-        c = Counter()
-        c.increment()
-        self.assertEqual(c.get_value(), 1)
-        c.increment()
-        c.increment()
-        self.assertEqual(c.get_value(), 3)
-    
-    def test_decrement(self):
-        """Метод decrement уменьшает значение на 1"""
-        c = Counter(start=5)
-        c.decrement()
-        self.assertEqual(c.get_value(), 4)
-        c.decrement()
-        c.decrement()
-        self.assertEqual(c.get_value(), 2)
-    
-    def test_reset(self):
-        """Метод reset возвращает счётчик к начальному значению"""
-        c = Counter(start=5)
-        c.increment()
-        c.increment()
-        c.increment()
-        self.assertEqual(c.get_value(), 8)
-        c.reset()
-        self.assertEqual(c.get_value(), 5)
-    
-    def test_reset_default_counter(self):
-        """Reset для счётчика с начальным значением по умолчанию"""
-        c = Counter()
-        c.increment()
-        c.increment()
-        c.reset()
-        self.assertEqual(c.get_value(), 0)
-    
-    def test_value_attribute_exists(self):
-        """Атрибут value должен быть доступен"""
-        c = Counter(start=7)
-        self.assertEqual(c.value, 7)
-    
-    def test_multiple_operations(self):
-        """Комбинация различных операций"""
-        c = Counter(start=10)
-        c.increment()
-        c.increment()
-        c.decrement()
-        c.increment()
-        self.assertEqual(c.get_value(), 12)
-
-
-class TestCounterAdvanced(unittest.TestCase):
-    """Дополнительные тесты (для усложнённых заданий)"""
-    
-    def test_increment_by(self):
-        """Дополнительно: метод increment_by"""
-        c = Counter()
-        if hasattr(c, 'increment_by'):
-            c.increment_by(5)
-            self.assertEqual(c.get_value(), 5)
-            c.increment_by(3)
-            self.assertEqual(c.get_value(), 8)
-        else:
-            self.skipTest("Метод increment_by не реализован")
-    
-    def test_str_method(self):
-        """Дополнительно: метод __str__"""
-        c = Counter(start=5)
-        result = str(c)
-        if "Counter" in result and "5" in result:
-            self.assertIn("5", result)
-        else:
-            self.skipTest("Метод __str__ не реализован или имеет другой формат")
-
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
-```
+### Файл тестов: `test_counter.py`
 
 ---
 
@@ -181,183 +78,66 @@ if __name__ == '__main__':
 ### Уровень сложности: 2/10
 
 ### Изучаемые концепции
-- Множественные атрибуты экземпляра
+- Атрибуты экземпляра
 - Методы, возвращающие вычисленные значения
-- Взаимодействие атрибутов внутри методов
+- Валидация данных в конструкторе
+- Магический метод `__str__`
+- Выброс исключений
 
-### Подробное условие
+### Условие
 
 Создайте класс `Rectangle`, представляющий прямоугольник.
 
 **Технические требования:**
-1. Метод `__init__` принимает `width` (ширина) и `height` (высота)
-2. Метод `area()` возвращает площадь прямоугольника
-3. Метод `perimeter()` возвращает периметр прямоугольника
-4. Метод `is_square()` возвращает `True`, если это квадрат
-5. Метод `resize(new_width, new_height)` изменяет размеры
-6. Метод `get_dimensions()` возвращает кортеж `(width, height)`
 
-**Файл для решения:** `rectangle.py`
+1. Метод `__init__` принимает два параметра: `width` (ширина) и `height` (высота)
+2. Ширина и высота должны быть положительными числами (int или float). При передаче недопустимых значений выбросить `ValueError` с понятным сообщением
+3. Метод `area()` возвращает площадь прямоугольника
+4. Метод `perimeter()` возвращает периметр прямоугольника
+5. Метод `is_square()` возвращает `True`, если прямоугольник является квадратом, иначе `False`
+6. Метод `__str__` возвращает строку в формате `"Rectangle(width=X, height=Y)"`
+
+**Файл для сдачи:** `rectangle.py`
 
 ### Примеры использования
 
 ```python
-# Пример 1: Базовые вычисления
-r = Rectangle(5, 3)
-print(r.area())        # 15
-print(r.perimeter())   # 16
-print(r.is_square())   # False
+# Пример 1: Создание и вычисление площади
+rect = Rectangle(5, 3)
+print(rect.area())  # Вывод: 15
 
-# Пример 2: Квадрат
-sq = Rectangle(4, 4)
-print(sq.area())       # 16
-print(sq.is_square())  # True
+# Пример 2: Периметр и проверка на квадрат
+rect = Rectangle(4, 4)
+print(rect.perimeter())  # Вывод: 16
+print(rect.is_square())  # Вывод: True
 
-# Пример 3: Изменение размеров
-r = Rectangle(10, 5)
-print(r.get_dimensions())  # (10, 5)
-r.resize(7, 7)
-print(r.get_dimensions())  # (7, 7)
-print(r.is_square())       # True
+# Пример 3: Строковое представление
+rect = Rectangle(10, 5)
+print(rect)  # Вывод: Rectangle(width=10, height=5)
+print(rect.is_square())  # Вывод: False
+
+# Пример 4: Ошибка валидации
+try:
+    rect = Rectangle(-5, 3)
+except ValueError as e:
+    print(e)  # Сообщение об ошибке
 ```
 
 ### Дополнительные задания
-1. Добавьте валидацию: ширина и высота должны быть положительными числами (иначе `ValueError`)
-2. Реализуйте метод `scale(factor)`, который умножает оба размера на коэффициент
-3. Добавьте метод `__eq__`, чтобы два прямоугольника считались равными при одинаковых размерах
 
-### Полезные ссылки для самостоятельного изучения
-- "Python return tuple from method"
+1. **Масштабирование**: Добавьте метод `scale(factor)`, который умножает размеры на коэффициент (положительное число). При неверном factor выбросить `ValueError`
+2. **Вмещение**: Добавьте метод `can_contain(other)`, принимающий другой Rectangle и возвращающий `True`, если текущий прямоугольник может вместить другой (с учётом возможного поворота)
+3. **Диагональ**: Добавьте метод `diagonal()`, возвращающий длину диагонали
+
+### Полезные ссылки для изучения
+- "Python __str__ method"
 - "Python raise ValueError"
-- "Python __eq__ method"
+- "Python isinstance check type"
+- "Python math module sqrt"
 
 ---
 
-### Файл автотестов: `test_rectangle.py`
-
-```python
-"""
-Автотесты для задачи 2: Прямоугольник
-Запуск: python -m pytest test_rectangle.py -v
-"""
-
-import unittest
-from rectangle import Rectangle
-
-
-class TestRectangle(unittest.TestCase):
-    """Тесты для класса Rectangle"""
-    
-    def test_create_rectangle(self):
-        """Создание прямоугольника с заданными размерами"""
-        r = Rectangle(5, 3)
-        self.assertEqual(r.width, 5)
-        self.assertEqual(r.height, 3)
-    
-    def test_area(self):
-        """Вычисление площади"""
-        r = Rectangle(5, 3)
-        self.assertEqual(r.area(), 15)
-        
-        r2 = Rectangle(10, 10)
-        self.assertEqual(r2.area(), 100)
-        
-        r3 = Rectangle(2.5, 4)
-        self.assertEqual(r3.area(), 10.0)
-    
-    def test_perimeter(self):
-        """Вычисление периметра"""
-        r = Rectangle(5, 3)
-        self.assertEqual(r.perimeter(), 16)
-        
-        r2 = Rectangle(10, 10)
-        self.assertEqual(r2.perimeter(), 40)
-    
-    def test_is_square_true(self):
-        """Проверка: прямоугольник является квадратом"""
-        sq = Rectangle(4, 4)
-        self.assertTrue(sq.is_square())
-        
-        sq2 = Rectangle(1, 1)
-        self.assertTrue(sq2.is_square())
-    
-    def test_is_square_false(self):
-        """Проверка: прямоугольник не является квадратом"""
-        r = Rectangle(5, 3)
-        self.assertFalse(r.is_square())
-        
-        r2 = Rectangle(10, 5)
-        self.assertFalse(r2.is_square())
-    
-    def test_resize(self):
-        """Изменение размеров прямоугольника"""
-        r = Rectangle(5, 3)
-        r.resize(10, 8)
-        self.assertEqual(r.width, 10)
-        self.assertEqual(r.height, 8)
-        self.assertEqual(r.area(), 80)
-    
-    def test_get_dimensions(self):
-        """Получение размеров как кортежа"""
-        r = Rectangle(5, 3)
-        self.assertEqual(r.get_dimensions(), (5, 3))
-        
-        r.resize(7, 7)
-        self.assertEqual(r.get_dimensions(), (7, 7))
-    
-    def test_dimensions_order(self):
-        """Порядок в кортеже: (width, height)"""
-        r = Rectangle(100, 1)
-        dims = r.get_dimensions()
-        self.assertEqual(dims[0], 100)  # width первый
-        self.assertEqual(dims[1], 1)    # height второй
-
-
-class TestRectangleAdvanced(unittest.TestCase):
-    """Дополнительные тесты"""
-    
-    def test_validation_negative_width(self):
-        """Дополнительно: отрицательная ширина вызывает ValueError"""
-        try:
-            r = Rectangle(-5, 3)
-            # Если исключение не выброшено, проверяем есть ли валидация
-            self.skipTest("Валидация не реализована")
-        except ValueError:
-            pass  # Ожидаемое поведение
-    
-    def test_validation_negative_height(self):
-        """Дополнительно: отрицательная высота вызывает ValueError"""
-        try:
-            r = Rectangle(5, -3)
-            self.skipTest("Валидация не реализована")
-        except ValueError:
-            pass
-    
-    def test_scale(self):
-        """Дополнительно: метод scale"""
-        r = Rectangle(4, 3)
-        if hasattr(r, 'scale'):
-            r.scale(2)
-            self.assertEqual(r.get_dimensions(), (8, 6))
-        else:
-            self.skipTest("Метод scale не реализован")
-    
-    def test_equality(self):
-        """Дополнительно: сравнение прямоугольников"""
-        r1 = Rectangle(5, 3)
-        r2 = Rectangle(5, 3)
-        r3 = Rectangle(3, 5)
-        
-        if r1 == r2:  # Проверяем, реализован ли __eq__
-            self.assertEqual(r1, r2)
-            self.assertNotEqual(r1, r3)
-        else:
-            self.skipTest("Метод __eq__ не реализован")
-
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
-```
+### Файл тестов: `test_rectangle.py`
 
 ---
 
@@ -367,201 +147,67 @@ if __name__ == '__main__':
 
 ### Изучаемые концепции
 - Инкапсуляция (защищённые атрибуты с `_`)
-- Валидация данных в методах
-- Выброс исключений
-- Работа со строками в методах
+- Управление состоянием объекта
+- Методы с валидацией и побочными эффектами
+- Работа с историей операций
 
-### Подробное условие
+### Условие
 
 Создайте класс `BankAccount`, представляющий банковский счёт.
 
 **Технические требования:**
-1. Метод `__init__` принимает `owner` (имя владельца) и необязательный `balance` (начальный баланс, по умолчанию 0)
-2. Баланс должен храниться в защищённом атрибуте `_balance`
-3. Метод `deposit(amount)` пополняет счёт. Сумма должна быть положительной, иначе `ValueError`
-4. Метод `withdraw(amount)` снимает деньги. Нельзя снять больше, чем есть на счёте (`ValueError`), и сумма должна быть положительной
-5. Метод `get_balance()` возвращает текущий баланс
-6. Метод `transfer(other_account, amount)` переводит деньги на другой счёт
-7. Метод `__str__` возвращает строку формата `"Account of {owner}: {balance} USD"`
 
-**Файл для решения:** `bank_account.py`
+1. Метод `__init__` принимает `owner` (имя владельца, непустая строка) и необязательный `balance` (начальный баланс, по умолчанию 0, не может быть отрицательным)
+2. Баланс должен храниться в защищённом атрибуте `_balance`
+3. Атрибут `owner` хранит имя владельца
+4. Метод `deposit(amount)` пополняет счёт на указанную сумму (положительное число)
+5. Метод `withdraw(amount)` снимает деньги со счёта. Если денег недостаточно, выбросить `ValueError` с сообщением "Недостаточно средств"
+6. Метод `get_balance()` возвращает текущий баланс
+7. Метод `__str__` возвращает строку в формате `"BankAccount(owner='Имя', balance=X)"`
+
+**Файл для сдачи:** `bank_account.py`
 
 ### Примеры использования
 
 ```python
-# Пример 1: Базовые операции
-acc = BankAccount("Alice", 100)
-print(acc.get_balance())     # 100
-acc.deposit(50)
-print(acc.get_balance())     # 150
-acc.withdraw(30)
-print(acc.get_balance())     # 120
+# Пример 1: Создание счёта и пополнение
+account = BankAccount("Иван Петров")
+account.deposit(1000)
+print(account.get_balance())  # Вывод: 1000
 
-# Пример 2: Ошибки валидации
-acc = BankAccount("Bob", 50)
+# Пример 2: Снятие денег
+account = BankAccount("Мария Сидорова", 5000)
+account.withdraw(2000)
+print(account.get_balance())  # Вывод: 3000
+
+# Пример 3: Недостаточно средств
+account = BankAccount("Алексей", 100)
 try:
-    acc.withdraw(100)  # Попытка снять больше, чем есть
+    account.withdraw(500)
 except ValueError as e:
-    print(e)  # "Insufficient funds" или подобное сообщение
+    print(e)  # Вывод: Недостаточно средств
 
-try:
-    acc.deposit(-10)  # Отрицательная сумма
-except ValueError as e:
-    print(e)  # "Amount must be positive" или подобное
-
-# Пример 3: Перевод между счетами
-acc1 = BankAccount("Alice", 100)
-acc2 = BankAccount("Bob", 50)
-acc1.transfer(acc2, 30)
-print(acc1.get_balance())  # 70
-print(acc2.get_balance())  # 80
-print(acc1)  # "Account of Alice: 70 USD"
+# Пример 4: Строковое представление
+account = BankAccount("Ольга", 1500)
+print(account)  # Вывод: BankAccount(owner='Ольга', balance=1500)
 ```
 
 ### Дополнительные задания
-1. Добавьте историю транзакций: метод `get_history()` возвращает список всех операций
-2. Добавьте статический атрибут `bank_name` и метод класса `get_bank_name()`
-3. Реализуйте лимит на снятие за одну операцию (например, не более 500)
 
-### Полезные ссылки для самостоятельного изучения
-- "Python protected attributes underscore"
-- "Python raise exception with message"
-- "Python __str__ vs __repr__"
+1. **История транзакций**: Добавьте метод `get_transaction_history()`, возвращающий список словарей с информацией о транзакциях (тип: 'deposit'/'withdraw'/'initial', сумма, баланс после)
+2. **Перевод**: Добавьте метод `transfer(other_account, amount)` для перевода денег на другой счёт (BankAccount). Должен выбрасывать TypeError если other_account не BankAccount
+3. **Начисление процентов**: Добавьте метод `apply_interest(rate)`, который начисляет процент на остаток (rate — дробное число, например 0.05 для 5%)
+
+### Полезные ссылки для изучения
+- "Python private and protected attributes"
 - "Python encapsulation"
+- "Python naming conventions underscore"
+- "Python property decorator"
 
 ---
 
-### Файл автотестов: `test_bank_account.py`
+### Файл тестов: `test_bank_account.py`
 
-```python
-"""
-Автотесты для задачи 3: Банковский счёт
-Запуск: python -m pytest test_bank_account.py -v
-"""
-
-import unittest
-from bank_account import BankAccount
-
-
-class TestBankAccount(unittest.TestCase):
-    """Тесты для класса BankAccount"""
-    
-    def test_create_account_with_balance(self):
-        """Создание счёта с начальным балансом"""
-        acc = BankAccount("Alice", 100)
-        self.assertEqual(acc.owner, "Alice")
-        self.assertEqual(acc.get_balance(), 100)
-    
-    def test_create_account_default_balance(self):
-        """Создание счёта без указания баланса (по умолчанию 0)"""
-        acc = BankAccount("Bob")
-        self.assertEqual(acc.get_balance(), 0)
-    
-    def test_deposit(self):
-        """Пополнение счёта"""
-        acc = BankAccount("Alice", 100)
-        acc.deposit(50)
-        self.assertEqual(acc.get_balance(), 150)
-        
-        acc.deposit(25.5)
-        self.assertEqual(acc.get_balance(), 175.5)
-    
-    def test_deposit_negative_raises_error(self):
-        """Пополнение на отрицательную сумму вызывает ValueError"""
-        acc = BankAccount("Alice", 100)
-        with self.assertRaises(ValueError):
-            acc.deposit(-10)
-    
-    def test_deposit_zero_raises_error(self):
-        """Пополнение на ноль вызывает ValueError"""
-        acc = BankAccount("Alice", 100)
-        with self.assertRaises(ValueError):
-            acc.deposit(0)
-    
-    def test_withdraw(self):
-        """Снятие денег со счёта"""
-        acc = BankAccount("Alice", 100)
-        acc.withdraw(30)
-        self.assertEqual(acc.get_balance(), 70)
-        
-        acc.withdraw(70)
-        self.assertEqual(acc.get_balance(), 0)
-    
-    def test_withdraw_insufficient_funds(self):
-        """Снятие больше, чем есть на счёте, вызывает ValueError"""
-        acc = BankAccount("Alice", 50)
-        with self.assertRaises(ValueError):
-            acc.withdraw(100)
-    
-    def test_withdraw_negative_raises_error(self):
-        """Снятие отрицательной суммы вызывает ValueError"""
-        acc = BankAccount("Alice", 100)
-        with self.assertRaises(ValueError):
-            acc.withdraw(-10)
-    
-    def test_transfer(self):
-        """Перевод денег между счетами"""
-        acc1 = BankAccount("Alice", 100)
-        acc2 = BankAccount("Bob", 50)
-        
-        acc1.transfer(acc2, 30)
-        
-        self.assertEqual(acc1.get_balance(), 70)
-        self.assertEqual(acc2.get_balance(), 80)
-    
-    def test_transfer_insufficient_funds(self):
-        """Перевод больше, чем есть на счёте"""
-        acc1 = BankAccount("Alice", 30)
-        acc2 = BankAccount("Bob", 50)
-        
-        with self.assertRaises(ValueError):
-            acc1.transfer(acc2, 100)
-        
-        # Балансы не должны измениться
-        self.assertEqual(acc1.get_balance(), 30)
-        self.assertEqual(acc2.get_balance(), 50)
-    
-    def test_str_method(self):
-        """Строковое представление счёта"""
-        acc = BankAccount("Alice", 100)
-        result = str(acc)
-        self.assertIn("Alice", result)
-        self.assertIn("100", result)
-        self.assertIn("USD", result)
-    
-    def test_protected_balance_attribute(self):
-        """Баланс хранится в защищённом атрибуте _balance"""
-        acc = BankAccount("Alice", 100)
-        self.assertTrue(hasattr(acc, '_balance'))
-        self.assertEqual(acc._balance, 100)
-
-
-class TestBankAccountAdvanced(unittest.TestCase):
-    """Дополнительные тесты"""
-    
-    def test_transaction_history(self):
-        """Дополнительно: история транзакций"""
-        acc = BankAccount("Alice", 100)
-        if hasattr(acc, 'get_history'):
-            acc.deposit(50)
-            acc.withdraw(30)
-            history = acc.get_history()
-            self.assertIsInstance(history, list)
-            self.assertGreater(len(history), 0)
-        else:
-            self.skipTest("Метод get_history не реализован")
-    
-    def test_bank_name_class_attribute(self):
-        """Дополнительно: атрибут класса bank_name"""
-        if hasattr(BankAccount, 'bank_name'):
-            self.assertIsNotNone(BankAccount.bank_name)
-        else:
-            self.skipTest("Атрибут bank_name не реализован")
-
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
-```
 
 ---
 
@@ -570,876 +216,600 @@ if __name__ == '__main__':
 ### Уровень сложности: 4/10
 
 ### Изучаемые концепции
-- Взаимодействие нескольких классов
-- Композиция (объекты как атрибуты других объектов)
-- Работа со списками объектов
-- Поиск и фильтрация объектов
+- Композиция (объект содержит другие объекты)
+- Работа с коллекциями объектов
+- Поиск и фильтрация
+- Взаимодействие между классами
 
-### Подробное условие
+### Условие
 
-Создайте два класса: `Book` и `Library`.
+Создайте два класса: `Book` (книга) и `Library` (библиотека).
 
-**Класс `Book`:**
-1. Атрибуты: `title` (название), `author` (автор), `year` (год издания), `is_available` (доступна ли, по умолчанию `True`)
-2. Метод `__str__` возвращает `"{title} by {author} ({year})"`
-3. Метод `borrow()` делает книгу недоступной (если уже недоступна — `ValueError`)
-4. Метод `return_book()` делает книгу доступной
+**Класс Book:**
+1. Метод `__init__` принимает: `title` (название), `author` (автор), `year` (год издания), `isbn` (уникальный идентификатор)
+2. Атрибут `is_available` (по умолчанию `True`)
+3. Метод `__str__` возвращает информацию о книге
 
-**Класс `Library`:**
-1. Атрибут `name` (название библиотеки)
-2. Атрибут `books` — список книг (изначально пустой)
-3. Метод `add_book(book)` добавляет книгу в библиотеку
-4. Метод `find_by_title(title)` возвращает книгу по названию или `None`
-5. Метод `find_by_author(author)` возвращает список всех книг автора
-6. Метод `get_available_books()` возвращает список доступных книг
-7. Метод `borrow_book(title)` находит книгу и делает её недоступной
+**Класс Library:**
+1. Метод `__init__` инициализирует пустую коллекцию книг
+2. Метод `add_book(book)` добавляет книгу (принимает только Book)
+3. Метод `remove_book(isbn)` удаляет книгу по ISBN, выбрасывает `KeyError` если не найдена
+4. Метод `find_by_title(title)` — поиск по названию (частичное совпадение, без учёта регистра), возвращает список
+5. Метод `find_by_author(author)` — поиск по автору (частичное совпадение, без учёта регистра), возвращает список
+6. Метод `get_available_books()` — возвращает список доступных книг
+7. Метод `borrow_book(isbn)` — выдаёт книгу (меняет `is_available` на `False`). Выбрасывает `KeyError` если книга не найдена, `ValueError` если уже выдана
+8. Метод `return_book(isbn)` — возвращает книгу. Выбрасывает `KeyError` если не найдена, `ValueError` если не была выдана
 
-**Файлы для решения:** `book.py` и `library.py`
+**Файлы для сдачи:** `book.py` и `library.py` (или один файл `library.py` с обоими классами)
 
 ### Примеры использования
 
 ```python
-# Пример 1: Создание книг
-b1 = Book("1984", "George Orwell", 1949)
-b2 = Book("Animal Farm", "George Orwell", 1945)
-b3 = Book("Brave New World", "Aldous Huxley", 1932)
+# Создание книг
+book1 = Book("Война и мир", "Лев Толстой", 1869, "978-5-17-090000-1")
+book2 = Book("Анна Каренина", "Лев Толстой", 1877, "978-5-17-090000-2")
+book3 = Book("Преступление и наказание", "Фёдор Достоевский", 1866, "978-5-17-090000-3")
 
-print(b1)  # "1984 by George Orwell (1949)"
+# Создание библиотеки
+library = Library()
+library.add_book(book1)
+library.add_book(book2)
+library.add_book(book3)
 
-# Пример 2: Работа с библиотекой
-lib = Library("City Library")
-lib.add_book(b1)
-lib.add_book(b2)
-lib.add_book(b3)
+# Поиск
+tolstoy_books = library.find_by_author("Толстой")  # [book1, book2]
+war_books = library.find_by_title("война")          # [book1]
 
-orwell_books = lib.find_by_author("George Orwell")
-print(len(orwell_books))  # 2
-
-# Пример 3: Выдача книг
-print(len(lib.get_available_books()))  # 3
-lib.borrow_book("1984")
-print(len(lib.get_available_books()))  # 2
-print(b1.is_available)  # False
-
-# Попытка взять уже выданную книгу
-try:
-    lib.borrow_book("1984")
-except ValueError:
-    print("Книга уже выдана!")
+# Выдача и возврат
+library.borrow_book("978-5-17-090000-1")
+available = library.get_available_books()           # [book2, book3]
+library.return_book("978-5-17-090000-1")
 ```
 
 ### Дополнительные задания
-1. Добавьте метод `find_by_year_range(start, end)` для поиска книг по диапазону годов
-2. Реализуйте метод `remove_book(title)` с проверкой, что книга не выдана
-3. Добавьте метод `__len__` для `Library`, возвращающий количество книг
 
-### Полезные ссылки для самостоятельного изучения
+1. **Статистика**: Метод `get_statistics()` возвращает словарь: `{'total': N, 'available': M, 'borrowed': K, 'by_author': {'Автор1': X, ...}}`
+2. **Сортировка**: Метод `get_books_sorted_by(field)` где field — 'title', 'author' или 'year'. Выбрасывает `ValueError` для неверного поля
+3. **Экспорт**: Метод `to_dict()` для Book, метод `export_to_json(filename=None)` для Library (если filename=None, возвращает JSON-строку)
+
+### Полезные ссылки для изучения
 - "Python composition vs inheritance"
-- "Python list of objects"
-- "Python filter list by attribute"
-- "Python find object in list"
+- "Python list comprehension filter"
+- "Python string lower() method"
+- "Python json module"
 
 ---
 
-### Файл автотестов: `test_book_library.py`
+### Файл тестов: `test_library.py`
 
-```python
-"""
-Автотесты для задачи 4: Книга и Библиотека
-Запуск: python -m pytest test_book_library.py -v
-"""
-
-import unittest
-from book import Book
-from library import Library
-
-
-class TestBook(unittest.TestCase):
-    """Тесты для класса Book"""
-    
-    def test_create_book(self):
-        """Создание книги с атрибутами"""
-        book = Book("1984", "George Orwell", 1949)
-        self.assertEqual(book.title, "1984")
-        self.assertEqual(book.author, "George Orwell")
-        self.assertEqual(book.year, 1949)
-        self.assertTrue(book.is_available)
-    
-    def test_book_str(self):
-        """Строковое представление книги"""
-        book = Book("1984", "George Orwell", 1949)
-        result = str(book)
-        self.assertIn("1984", result)
-        self.assertIn("George Orwell", result)
-        self.assertIn("1949", result)
-    
-    def test_borrow_book(self):
-        """Выдача книги"""
-        book = Book("1984", "George Orwell", 1949)
-        book.borrow()
-        self.assertFalse(book.is_available)
-    
-    def test_borrow_unavailable_book_raises_error(self):
-        """Попытка выдать уже выданную книгу"""
-        book = Book("1984", "George Orwell", 1949)
-        book.borrow()
-        with self.assertRaises(ValueError):
-            book.borrow()
-    
-    def test_return_book(self):
-        """Возврат книги"""
-        book = Book("1984", "George Orwell", 1949)
-        book.borrow()
-        book.return_book()
-        self.assertTrue(book.is_available)
-
-
-class TestLibrary(unittest.TestCase):
-    """Тесты для класса Library"""
-    
-    def setUp(self):
-        """Подготовка данных для каждого теста"""
-        self.lib = Library("Test Library")
-        self.b1 = Book("1984", "George Orwell", 1949)
-        self.b2 = Book("Animal Farm", "George Orwell", 1945)
-        self.b3 = Book("Brave New World", "Aldous Huxley", 1932)
-    
-    def test_create_library(self):
-        """Создание библиотеки"""
-        lib = Library("City Library")
-        self.assertEqual(lib.name, "City Library")
-        self.assertEqual(lib.books, [])
-    
-    def test_add_book(self):
-        """Добавление книги в библиотеку"""
-        self.lib.add_book(self.b1)
-        self.assertEqual(len(self.lib.books), 1)
-        self.assertIn(self.b1, self.lib.books)
-    
-    def test_find_by_title_found(self):
-        """Поиск книги по названию — найдена"""
-        self.lib.add_book(self.b1)
-        self.lib.add_book(self.b2)
-        
-        result = self.lib.find_by_title("1984")
-        self.assertEqual(result, self.b1)
-    
-    def test_find_by_title_not_found(self):
-        """Поиск книги по названию — не найдена"""
-        self.lib.add_book(self.b1)
-        
-        result = self.lib.find_by_title("Unknown Book")
-        self.assertIsNone(result)
-    
-    def test_find_by_author(self):
-        """Поиск всех книг автора"""
-        self.lib.add_book(self.b1)
-        self.lib.add_book(self.b2)
-        self.lib.add_book(self.b3)
-        
-        orwell_books = self.lib.find_by_author("George Orwell")
-        self.assertEqual(len(orwell_books), 2)
-        self.assertIn(self.b1, orwell_books)
-        self.assertIn(self.b2, orwell_books)
-    
-    def test_find_by_author_not_found(self):
-        """Поиск книг несуществующего автора"""
-        self.lib.add_book(self.b1)
-        
-        result = self.lib.find_by_author("Unknown Author")
-        self.assertEqual(result, [])
-    
-    def test_get_available_books(self):
-        """Получение списка доступных книг"""
-        self.lib.add_book(self.b1)
-        self.lib.add_book(self.b2)
-        self.lib.add_book(self.b3)
-        
-        available = self.lib.get_available_books()
-        self.assertEqual(len(available), 3)
-        
-        self.b1.borrow()
-        available = self.lib.get_available_books()
-        self.assertEqual(len(available), 2)
-        self.assertNotIn(self.b1, available)
-    
-    def test_borrow_book(self):
-        """Выдача книги через библиотеку"""
-        self.lib.add_book(self.b1)
-        self.lib.add_book(self.b2)
-        
-        self.lib.borrow_book("1984")
-        self.assertFalse(self.b1.is_available)
-        self.assertTrue(self.b2.is_available)
-    
-    def test_borrow_book_not_found(self):
-        """Попытка выдать несуществующую книгу"""
-        self.lib.add_book(self.b1)
-        
-        # Должно либо вернуть None, либо выбросить исключение
-        try:
-            result = self.lib.borrow_book("Unknown")
-            # Если не выбросило исключение, проверяем что вернулось
-        except (ValueError, KeyError):
-            pass  # Допустимое поведение
-
-
-class TestLibraryAdvanced(unittest.TestCase):
-    """Дополнительные тесты"""
-    
-    def setUp(self):
-        self.lib = Library("Test Library")
-        self.b1 = Book("1984", "George Orwell", 1949)
-        self.b2 = Book("Animal Farm", "George Orwell", 1945)
-        self.b3 = Book("Brave New World", "Aldous Huxley", 1932)
-        self.lib.add_book(self.b1)
-        self.lib.add_book(self.b2)
-        self.lib.add_book(self.b3)
-    
-    def test_find_by_year_range(self):
-        """Дополнительно: поиск по диапазону годов"""
-        if hasattr(self.lib, 'find_by_year_range'):
-            result = self.lib.find_by_year_range(1940, 1950)
-            self.assertEqual(len(result), 2)
-        else:
-            self.skipTest("Метод find_by_year_range не реализован")
-    
-    def test_len_method(self):
-        """Дополнительно: метод __len__"""
-        try:
-            length = len(self.lib)
-            self.assertEqual(length, 3)
-        except TypeError:
-            self.skipTest("Метод __len__ не реализован")
-
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
-```
-
----
-
-## Задача 5: Наследование — Транспортные средства
+## Задача 5: Геометрические фигуры (Наследование)
 
 ### Уровень сложности: 5/10
 
 ### Изучаемые концепции
 - Наследование классов
-- Вызов конструктора родительского класса (`super()`)
-- Переопределение методов
-- Расширение функциональности родительского класса
+- Базовый класс и подклассы
+- Переопределение методов (override)
+- Вызов методов родителя через `super()`
+- Абстрактная логика в базовом классе
 
-### Подробное условие
+### Условие
 
-Создайте иерархию классов для транспортных средств.
+Создайте иерархию классов для геометрических фигур.
 
-**Базовый класс `Vehicle`:**
-1. Атрибуты в `__init__`: `brand` (марка), `model` (модель), `year` (год выпуска)
-2. Атрибут `is_running` (заведён ли двигатель, по умолчанию `False`)
-3. Метод `start()` — запускает двигатель (меняет `is_running` на `True`)
-4. Метод `stop()` — останавливает двигатель
-5. Метод `get_info()` — возвращает `"{brand} {model} ({year})"`
+**Базовый класс Shape:**
+1. Метод `__init__` принимает `name` (название фигуры)
+2. Метод `area()` возвращает 0 (будет переопределён в подклассах)
+3. Метод `perimeter()` возвращает 0 (будет переопределён в подклассах)
+4. Метод `describe()` возвращает строку: `"{name}: площадь = {area}, периметр = {perimeter}"`
 
-**Класс `Car(Vehicle)`:**
-1. Дополнительный атрибут `num_doors` (количество дверей)
-2. Переопределённый `get_info()` добавляет информацию о дверях
-3. Метод `honk()` — возвращает `"Beep beep!"`
+**Класс Circle (наследуется от Shape):**
+1. Метод `__init__` принимает `radius` (радиус, положительное число)
+2. Переопределяет `area()` — возвращает площадь круга (π * r²)
+3. Переопределяет `perimeter()` — возвращает длину окружности (2 * π * r)
 
-**Класс `Motorcycle(Vehicle)`:**
-1. Дополнительный атрибут `has_sidecar` (есть ли коляска, по умолчанию `False`)
-2. Переопределённый `get_info()` добавляет информацию о коляске
-3. Метод `wheelie()` — возвращает `"Doing a wheelie!"` (но только если двигатель запущен, иначе `ValueError`)
+**Класс Rectangle (наследуется от Shape):**
+1. Метод `__init__` принимает `width` и `height` (положительные числа)
+2. Переопределяет `area()` и `perimeter()`
+3. Метод `is_square()` возвращает `True`, если это квадрат
 
-**Класс `ElectricCar(Car)`:**
-1. Дополнительный атрибут `battery_capacity` (ёмкость батареи в kWh)
-2. Атрибут `charge_level` (уровень заряда, по умолчанию 100)
-3. Метод `charge(amount)` — увеличивает заряд (максимум 100)
-4. Переопределённый `start()` — нельзя завести при заряде 0
+**Класс Triangle (наследуется от Shape):**
+1. Метод `__init__` принимает три стороны `a`, `b`, `c` (положительные числа)
+2. Валидация: стороны должны образовывать треугольник (сумма любых двух сторон > третьей), иначе `ValueError`
+3. Переопределяет `area()` (формула Герона) и `perimeter()`
 
-**Файлы для решения:** `vehicle.py`, `car.py`, `motorcycle.py`, `electric_car.py`
+**Файл для сдачи:** `shapes.py`
 
 ### Примеры использования
 
 ```python
-# Пример 1: Базовый Vehicle
-v = Vehicle("Generic", "Model", 2020)
-print(v.get_info())  # "Generic Model (2020)"
-v.start()
-print(v.is_running)  # True
+import math
 
-# Пример 2: Car
-car = Car("Toyota", "Camry", 2022, num_doors=4)
-print(car.get_info())  # "Toyota Camry (2022), 4 doors"
-print(car.honk())      # "Beep beep!"
+circle = Circle(5)
+print(circle.area())       # ≈ 78.54
+print(circle.perimeter())  # ≈ 31.42
+print(circle.describe())   # "Circle: площадь = 78.54..., периметр = 31.42..."
 
-# Пример 3: Motorcycle
-moto = Motorcycle("Harley", "Sportster", 2021, has_sidecar=True)
-print(moto.get_info())  # "Harley Sportster (2021), with sidecar"
+rect = Rectangle(4, 6)
+print(rect.area())         # 24
+print(rect.is_square())    # False
 
-moto.start()
-print(moto.wheelie())  # "Doing a wheelie!"
+square = Rectangle(5, 5)
+print(square.is_square())  # True
 
-# Пример 4: ElectricCar
-ev = ElectricCar("Tesla", "Model 3", 2023, num_doors=4, battery_capacity=75)
-ev.charge_level = 0
-try:
-    ev.start()  # ValueError: Battery is empty
-except ValueError:
-    ev.charge(50)
-    ev.start()  # Теперь работает
+triangle = Triangle(3, 4, 5)
+print(triangle.area())     # 6.0
+print(triangle.perimeter()) # 12
 ```
 
 ### Дополнительные задания
-1. Добавьте класс `Truck(Vehicle)` с атрибутом `cargo_capacity` и методом `load_cargo(weight)`
-2. Реализуйте метод `__repr__` для всех классов для отладки
-3. Добавьте абстрактный метод `fuel_type()` в базовый класс (вернуть тип топлива)
 
-### Полезные ссылки для самостоятельного изучения
-- "Python inheritance tutorial"
+1. **Класс Square**: Создайте класс `Square`, наследующийся от `Rectangle`, принимающий только одну сторону
+2. **Сравнение**: Добавьте метод `__eq__` в Shape для сравнения фигур по площади
+3. **Сравнение больше/меньше**: Добавьте методы `__lt__`, `__gt__` для сравнения фигур по площади
+
+### Полезные ссылки для изучения
+- "Python class inheritance"
 - "Python super() function"
 - "Python method overriding"
-- "Python multiple inheritance MRO"
+- "Python math.pi"
+- "Heron's formula"
 
 ---
 
-### Файл автотестов: `test_vehicles.py`
-
-```python
-"""
-Автотесты для задачи 5: Транспортные средства
-Запуск: python -m pytest test_vehicles.py -v
-"""
-
-import unittest
-from vehicle import Vehicle
-from car import Car
-from motorcycle import Motorcycle
-from electric_car import ElectricCar
-
-
-class TestVehicle(unittest.TestCase):
-    """Тесты для базового класса Vehicle"""
-    
-    def test_create_vehicle(self):
-        """Создание транспортного средства"""
-        v = Vehicle("Generic", "Model", 2020)
-        self.assertEqual(v.brand, "Generic")
-        self.assertEqual(v.model, "Model")
-        self.assertEqual(v.year, 2020)
-        self.assertFalse(v.is_running)
-    
-    def test_start_stop(self):
-        """Запуск и остановка двигателя"""
-        v = Vehicle("Generic", "Model", 2020)
-        
-        v.start()
-        self.assertTrue(v.is_running)
-        
-        v.stop()
-        self.assertFalse(v.is_running)
-    
-    def test_get_info(self):
-        """Информация о транспортном средстве"""
-        v = Vehicle("Generic", "Model", 2020)
-        info = v.get_info()
-        self.assertIn("Generic", info)
-        self.assertIn("Model", info)
-        self.assertIn("2020", info)
-
-
-class TestCar(unittest.TestCase):
-    """Тесты для класса Car"""
-    
-    def test_create_car(self):
-        """Создание автомобиля"""
-        car = Car("Toyota", "Camry", 2022, num_doors=4)
-        self.assertEqual(car.brand, "Toyota")
-        self.assertEqual(car.num_doors, 4)
-    
-    def test_car_inherits_vehicle(self):
-        """Car наследует от Vehicle"""
-        car = Car("Toyota", "Camry", 2022, num_doors=4)
-        self.assertIsInstance(car, Vehicle)
-    
-    def test_car_start_stop(self):
-        """Унаследованные методы работают"""
-        car = Car("Toyota", "Camry", 2022, num_doors=4)
-        car.start()
-        self.assertTrue(car.is_running)
-    
-    def test_car_get_info(self):
-        """Переопределённый get_info включает двери"""
-        car = Car("Toyota", "Camry", 2022, num_doors=4)
-        info = car.get_info()
-        self.assertIn("Toyota", info)
-        self.assertIn("4", info)
-        self.assertIn("door", info.lower())
-    
-    def test_honk(self):
-        """Метод honk"""
-        car = Car("Toyota", "Camry", 2022, num_doors=4)
-        self.assertEqual(car.honk(), "Beep beep!")
-
-
-class TestMotorcycle(unittest.TestCase):
-    """Тесты для класса Motorcycle"""
-    
-    def test_create_motorcycle(self):
-        """Создание мотоцикла"""
-        moto = Motorcycle("Harley", "Sportster", 2021)
-        self.assertEqual(moto.brand, "Harley")
-        self.assertFalse(moto.has_sidecar)
-    
-    def test_motorcycle_with_sidecar(self):
-        """Мотоцикл с коляской"""
-        moto = Motorcycle("Ural", "Gear Up", 2020, has_sidecar=True)
-        self.assertTrue(moto.has_sidecar)
-    
-    def test_motorcycle_inherits_vehicle(self):
-        """Motorcycle наследует от Vehicle"""
-        moto = Motorcycle("Harley", "Sportster", 2021)
-        self.assertIsInstance(moto, Vehicle)
-    
-    def test_motorcycle_get_info(self):
-        """get_info отображает информацию о коляске"""
-        moto = Motorcycle("Ural", "Gear Up", 2020, has_sidecar=True)
-        info = moto.get_info()
-        self.assertIn("sidecar", info.lower())
-    
-    def test_wheelie_when_running(self):
-        """wheelie работает при запущенном двигателе"""
-        moto = Motorcycle("Harley", "Sportster", 2021)
-        moto.start()
-        result = moto.wheelie()
-        self.assertIn("wheelie", result.lower())
-    
-    def test_wheelie_when_not_running(self):
-        """wheelie вызывает ошибку при выключенном двигателе"""
-        moto = Motorcycle("Harley", "Sportster", 2021)
-        with self.assertRaises(ValueError):
-            moto.wheelie()
-
-
-class TestElectricCar(unittest.TestCase):
-    """Тесты для класса ElectricCar"""
-    
-    def test_create_electric_car(self):
-        """Создание электромобиля"""
-        ev = ElectricCar("Tesla", "Model 3", 2023, num_doors=4, battery_capacity=75)
-        self.assertEqual(ev.brand, "Tesla")
-        self.assertEqual(ev.battery_capacity, 75)
-        self.assertEqual(ev.charge_level, 100)
-    
-    def test_electric_car_inherits_car(self):
-        """ElectricCar наследует от Car"""
-        ev = ElectricCar("Tesla", "Model 3", 2023, num_doors=4, battery_capacity=75)
-        self.assertIsInstance(ev, Car)
-        self.assertIsInstance(ev, Vehicle)
-    
-    def test_electric_car_has_honk(self):
-        """Унаследованный метод honk"""
-        ev = ElectricCar("Tesla", "Model 3", 2023, num_doors=4, battery_capacity=75)
-        self.assertEqual(ev.honk(), "Beep beep!")
-    
-    def test_charge(self):
-        """Зарядка батареи"""
-        ev = ElectricCar("Tesla", "Model 3", 2023, num_doors=4, battery_capacity=75)
-        ev.charge_level = 50
-        ev.charge(30)
-        self.assertEqual(ev.charge_level, 80)
-    
-    def test_charge_max_100(self):
-        """Заряд не превышает 100"""
-        ev = ElectricCar("Tesla", "Model 3", 2023, num_doors=4, battery_capacity=75)
-        ev.charge_level = 90
-        ev.charge(50)
-        self.assertEqual(ev.charge_level, 100)
-    
-    def test_start_with_empty_battery(self):
-        """Нельзя завести с пустой батареей"""
-        ev = ElectricCar("Tesla", "Model 3", 2023, num_doors=4, battery_capacity=75)
-        ev.charge_level = 0
-        with self.assertRaises(ValueError):
-            ev.start()
-    
-    def test_start_with_charge(self):
-        """Можно завести при наличии заряда"""
-        ev = ElectricCar("Tesla", "Model 3", 2023, num_doors=4, battery_capacity=75)
-        ev.charge_level = 10
-        ev.start()
-        self.assertTrue(ev.is_running)
-
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
-```
+### Файл тестов: `test_shapes.py`
 
 ---
 
-## Задача 6: Полиморфизм — Зоопарк
+## Задача 6: Система сотрудников
 
 ### Уровень сложности: 6/10
 
 ### Изучаемые концепции
 - Полиморфизм
-- Единый интерфейс для разных типов объектов
-- Обработка коллекций разнородных объектов
-- Duck typing в Python
+- Наследование с разным поведением
+- Абстрактные методы (концептуально)
+- Работа с коллекциями разнотипных объектов
 
-### Подробное условие
+### Условие
 
-Создайте систему классов для зоопарка, демонстрирующую полиморфизм.
+Создайте систему для управления сотрудниками компании.
 
-**Базовый класс `Animal`:**
-1. Атрибуты: `name`, `age`
-2. Метод `speak()` — возвращает строку со звуком животного (в базовом классе — `"Some sound"`)
-3. Метод `info()` — возвращает `"{name}, {age} years old"`
-4. Метод `eat(food)` — возвращает `"{name} is eating {food}"`
+**Базовый класс Employee:**
+1. Метод `__init__` принимает: `name` (имя), `employee_id` (ID сотрудника), `base_salary` (базовая зарплата)
+2. Метод `calculate_salary()` возвращает базовую зарплату (будет переопределён)
+3. Метод `get_info()` возвращает строку с информацией о сотруднике
+4. Метод `__str__` возвращает краткую информацию
 
-**Классы-потомки:**
-- `Lion`: `speak()` → `"Roar!"`, дополнительный метод `hunt()` → `"{name} is hunting"`
-- `Elephant`: `speak()` → `"Trumpet!"`, атрибут `trunk_length`, метод `spray_water()` → `"{name} sprays water"`
-- `Parrot`: `speak()` → `"Squawk! {phrase}"` где `phrase` — атрибут с фразой попугая, метод `learn_phrase(phrase)` — меняет фразу
-- `Snake`: `speak()` → `"Hiss..."`, атрибут `is_venomous`, метод `shed_skin()` → `"{name} is shedding skin"`
+**Класс Manager (наследуется от Employee):**
+1. Дополнительный атрибут `bonus` (бонус, по умолчанию 0)
+2. Метод `calculate_salary()` возвращает `base_salary + bonus`
+3. Метод `set_bonus(amount)` устанавливает бонус
 
-**Класс `Zoo`:**
-1. Атрибут `animals` — список животных
-2. Метод `add_animal(animal)` — добавляет животное
-3. Метод `all_speak()` — возвращает список результатов `speak()` всех животных
-4. Метод `feed_all(food)` — возвращает список результатов кормления всех
-5. Метод `get_by_type(animal_type)` — возвращает всех животных указанного типа
+**Класс Developer (наследуется от Employee):**
+1. Дополнительный атрибут `programming_languages` (список языков, по умолчанию пустой)
+2. Метод `calculate_salary()` возвращает `base_salary + 1000 * количество_языков`
+3. Метод `add_language(language)` добавляет язык в список
 
-**Файлы для решения:** `animal.py`, `lion.py`, `elephant.py`, `parrot.py`, `snake.py`, `zoo.py`
+**Класс Intern (наследуется от Employee):**
+1. Дополнительный атрибут `duration_months` (срок стажировки в месяцах)
+2. Метод `calculate_salary()` возвращает `base_salary * 0.5` (стажёры получают половину)
+
+**Класс Company:**
+1. Метод `__init__` принимает `name` (название компании)
+2. Метод `add_employee(employee)` добавляет сотрудника
+3. Метод `get_total_salaries()` возвращает сумму зарплат всех сотрудников
+4. Метод `get_employees_by_type(employee_type)` возвращает список сотрудников указанного типа
+5. Метод `fire_employee(employee_id)` удаляет сотрудника по ID
+
+**Файл для сдачи:** `employees.py`
 
 ### Примеры использования
 
 ```python
-# Пример 1: Полиморфизм в действии
-lion = Lion("Simba", 5)
-elephant = Elephant("Dumbo", 10, trunk_length=2.5)
-parrot = Parrot("Polly", 3, phrase="Hello!")
-snake = Snake("Kaa", 8, is_venomous=False)
+# Создание сотрудников
+manager = Manager("Иван", "M001", 100000)
+manager.set_bonus(20000)
 
-animals = [lion, elephant, parrot, snake]
-for animal in animals:
-    print(animal.speak())
-# "Roar!"
-# "Trumpet!"
-# "Squawk! Hello!"
-# "Hiss..."
+dev = Developer("Мария", "D001", 80000)
+dev.add_language("Python")
+dev.add_language("JavaScript")
 
-# Пример 2: Зоопарк
-zoo = Zoo()
-zoo.add_animal(lion)
-zoo.add_animal(elephant)
-zoo.add_animal(parrot)
+intern = Intern("Алексей", "I001", 40000, duration_months=3)
 
-sounds = zoo.all_speak()
-print(sounds)  # ["Roar!", "Trumpet!", "Squawk! Hello!"]
+# Компания
+company = Company("TechCorp")
+company.add_employee(manager)
+company.add_employee(dev)
+company.add_employee(intern)
 
-# Пример 3: Кормление
-meals = zoo.feed_all("meat")
-print(meals)
-# ["Simba is eating meat", "Dumbo is eating meat", "Polly is eating meat"]
+print(manager.calculate_salary())  # 120000
+print(dev.calculate_salary())      # 82000
+print(intern.calculate_salary())   # 20000
 
-# Пример 4: Уникальные методы
-parrot.learn_phrase("Polly wants a cracker!")
-print(parrot.speak())  # "Squawk! Polly wants a cracker!"
-
-print(lion.hunt())  # "Simba is hunting"
+print(company.get_total_salaries())  # 222000
 ```
 
 ### Дополнительные задания
-1. Добавьте метод `Zoo.oldest_animal()`, возвращающий самое старое животное
-2. Реализуйте метод `Zoo.total_age()` через встроенную функцию `sum()`
-3. Добавьте класс `Penguin` с методом `swim()` и `slide()`
 
-### Полезные ссылки для самостоятельного изучения
-- "Python polymorphism examples"
-- "Python duck typing"
+1. **SalesPerson**: Класс с атрибутом `sales_amount` и комиссией 5% от продаж
+2. **Отчёт**: Метод `generate_report()` в Company, возвращающий детальный отчёт
+3. **Повышение**: Метод `give_raise(employee_id, amount)` в Company
+
+### Полезные ссылки для изучения
+- "Python polymorphism"
 - "Python isinstance vs type"
-- "Python list comprehension with methods"
+- "Python abstract base class"
 
 ---
 
-### Файл автотестов: `test_zoo.py`
+### Файл тестов: `test_employees.py`
+
+
+---
+
+## Задача 7: Стек и Очередь
+
+### Уровень сложности: 6/10
+
+### Изучаемые концепции
+- Реализация структур данных
+- Магические методы `__len__`, `__bool__`, `__iter__`
+- Исключения для особых ситуаций
+- Итераторы
+
+### Условие
+
+Реализуйте два класса: `Stack` (стек, LIFO) и `Queue` (очередь, FIFO).
+
+**Класс Stack (Last In, First Out):**
+1. Метод `__init__` создаёт пустой стек (можно передать iterable для начальной инициализации)
+2. Метод `push(item)` добавляет элемент на вершину стека
+3. Метод `pop()` удаляет и возвращает элемент с вершины. Если стек пуст — выбросить `IndexError` с сообщением "Stack is empty"
+4. Метод `peek()` возвращает элемент с вершины без удаления. Если пуст — `IndexError`
+5. Метод `is_empty()` возвращает `True`, если стек пуст
+6. `__len__` возвращает количество элементов
+7. `__bool__` возвращает `True`, если стек не пуст
+8. `__iter__` позволяет итерироваться по стеку (от вершины к основанию)
+
+**Класс Queue (First In, First Out):**
+1. Метод `__init__` создаёт пустую очередь (можно передать iterable)
+2. Метод `enqueue(item)` добавляет элемент в конец очереди
+3. Метод `dequeue()` удаляет и возвращает элемент из начала. Если пуста — `IndexError` с сообщением "Queue is empty"
+4. Метод `front()` возвращает первый элемент без удаления
+5. Метод `is_empty()` возвращает `True`, если очередь пуста
+6. `__len__`, `__bool__`, `__iter__` аналогично Stack
+
+**Файл для сдачи:** `data_structures.py`
+
+### Примеры использования
 
 ```python
-"""
-Автотесты для задачи 6: Зоопарк
-Запуск: python -m pytest test_zoo.py -v
-"""
+# Stack
+stack = Stack()
+stack.push(1)
+stack.push(2)
+stack.push(3)
+print(stack.pop())   # 3
+print(stack.peek())  # 2
+print(len(stack))    # 2
 
-import unittest
-from animal import Animal
-from lion import Lion
-from elephant import Elephant
-from parrot import Parrot
-from snake import Snake
-from zoo import Zoo
+for item in stack:
+    print(item)  # 2, 1
 
+# Queue
+queue = Queue([1, 2, 3])
+print(queue.dequeue())  # 1
+queue.enqueue(4)
+print(queue.front())    # 2
 
-class TestAnimal(unittest.TestCase):
-    """Тесты для базового класса Animal"""
-    
-    def test_create_animal(self):
-        """Создание животного"""
-        a = Animal("Generic", 5)
-        self.assertEqual(a.name, "Generic")
-        self.assertEqual(a.age, 5)
-    
-    def test_speak(self):
-        """Базовый метод speak"""
-        a = Animal("Generic", 5)
-        result = a.speak()
-        self.assertIsInstance(result, str)
-    
-    def test_info(self):
-        """Метод info"""
-        a = Animal("Generic", 5)
-        info = a.info()
-        self.assertIn("Generic", info)
-        self.assertIn("5", info)
-    
-    def test_eat(self):
-        """Метод eat"""
-        a = Animal("Generic", 5)
-        result = a.eat("food")
-        self.assertIn("Generic", result)
-        self.assertIn("food", result)
-
-
-class TestLion(unittest.TestCase):
-    """Тесты для класса Lion"""
-    
-    def test_create_lion(self):
-        """Создание льва"""
-        lion = Lion("Simba", 5)
-        self.assertEqual(lion.name, "Simba")
-        self.assertIsInstance(lion, Animal)
-    
-    def test_speak(self):
-        """Лев рычит"""
-        lion = Lion("Simba", 5)
-        self.assertEqual(lion.speak(), "Roar!")
-    
-    def test_hunt(self):
-        """Метод hunt"""
-        lion = Lion("Simba", 5)
-        result = lion.hunt()
-        self.assertIn("Simba", result)
-        self.assertIn("hunting", result.lower())
-
-
-class TestElephant(unittest.TestCase):
-    """Тесты для класса Elephant"""
-    
-    def test_create_elephant(self):
-        """Создание слона"""
-        elephant = Elephant("Dumbo", 10, trunk_length=2.5)
-        self.assertEqual(elephant.name, "Dumbo")
-        self.assertEqual(elephant.trunk_length, 2.5)
-    
-    def test_speak(self):
-        """Слон трубит"""
-        elephant = Elephant("Dumbo", 10, trunk_length=2.5)
-        self.assertEqual(elephant.speak(), "Trumpet!")
-    
-    def test_spray_water(self):
-        """Метод spray_water"""
-        elephant = Elephant("Dumbo", 10, trunk_length=2.5)
-        result = elephant.spray_water()
-        self.assertIn("Dumbo", result)
-        self.assertIn("water", result.lower())
-
-
-class TestParrot(unittest.TestCase):
-    """Тесты для класса Parrot"""
-    
-    def test_create_parrot(self):
-        """Создание попугая"""
-        parrot = Parrot("Polly", 3, phrase="Hello!")
-        self.assertEqual(parrot.name, "Polly")
-        self.assertEqual(parrot.phrase, "Hello!")
-    
-    def test_speak(self):
-        """Попугай говорит фразу"""
-        parrot = Parrot("Polly", 3, phrase="Hello!")
-        result = parrot.speak()
-        self.assertIn("Hello!", result)
-        self.assertIn("Squawk", result)
-    
-    def test_learn_phrase(self):
-        """Попугай учит новую фразу"""
-        parrot = Parrot("Polly", 3, phrase="Hello!")
-        parrot.learn_phrase("Goodbye!")
-        result = parrot.speak()
-        self.assertIn("Goodbye!", result)
-        self.assertNotIn("Hello!", result)
-
-
-class TestSnake(unittest.TestCase):
-    """Тесты для класса Snake"""
-    
-    def test_create_snake(self):
-        """Создание змеи"""
-        snake = Snake("Kaa", 8, is_venomous=False)
-        self.assertEqual(snake.name, "Kaa")
-        self.assertFalse(snake.is_venomous)
-    
-    def test_create_venomous_snake(self):
-        """Создание ядовитой змеи"""
-        snake = Snake("Viper", 5, is_venomous=True)
-        self.assertTrue(snake.is_venomous)
-    
-    def test_speak(self):
-        """Змея шипит"""
-        snake = Snake("Kaa", 8, is_venomous=False)
-        result = snake.speak()
-        self.assertIn("Hiss", result)
-    
-    def test_shed_skin(self):
-        """Метод shed_skin"""
-        snake = Snake("Kaa", 8, is_venomous=False)
-        result = snake.shed_skin()
-        self.assertIn("Kaa", result)
-        self.assertIn("shed", result.lower())
-
-
-class TestZoo(unittest.TestCase):
-    """Тесты для класса Zoo"""
-    
-    def setUp(self):
-        """Подготовка данных"""
-        self.zoo = Zoo()
-        self.lion = Lion("Simba", 5)
-        self.elephant = Elephant("Dumbo", 10, trunk_length=2.5)
-        self.parrot = Parrot("Polly", 3, phrase="Hello!")
-    
-    def test_create_zoo(self):
-        """Создание зоопарка"""
-        zoo = Zoo()
-        self.assertEqual(zoo.animals, [])
-    
-    def test_add_animal(self):
-        """Добавление животного"""
-        self.zoo.add_animal(self.lion)
-        self.assertEqual(len(self.zoo.animals), 1)
-    
-    def test_all_speak(self):
-        """Все животные говорят"""
-        self.zoo.add_animal(self.lion)
-        self.zoo.add_animal(self.elephant)
-        self.zoo.add_animal(self.parrot)
-        
-        sounds = self.zoo.all_speak()
-        
-        self.assertEqual(len(sounds), 3)
-        self.assertIn("Roar!", sounds)
-        self.assertIn("Trumpet!", sounds)
-    
-    def test_feed_all(self):
-        """Кормление всех животных"""
-        self.zoo.add_animal(self.lion)
-        self.zoo.add_animal(self.elephant)
-        
-        meals = self.zoo.feed_all("meat")
-        
-        self.assertEqual(len(meals), 2)
-        self.assertTrue(all("meat" in m for m in meals))
-    
-    def test_get_by_type(self):
-        """Получение животных по типу"""
-        lion2 = Lion("Mufasa", 15)
-        self.zoo.add_animal(self.lion)
-        self.zoo.add_animal(lion2)
-        self.zoo.add_animal(self.elephant)
-        
-        lions = self.zoo.get_by_type(Lion)
-        
-        self.assertEqual(len(lions), 2)
-        self.assertIn(self.lion, lions)
-        self.assertIn(lion2, lions)
-
-
-class TestZooAdvanced(unittest.TestCase):
-    """Дополнительные тесты"""
-    
-    def setUp(self):
-        self.zoo = Zoo()
-        self.lion = Lion("Simba", 5)
-        self.elephant = Elephant("Dumbo", 10, trunk_length=2.5)
-        self.parrot = Parrot("Polly", 3, phrase="Hello!")
-        self.zoo.add_animal(self.lion)
-        self.zoo.add_animal(self.elephant)
-        self.zoo.add_animal(self.parrot)
-    
-    def test_oldest_animal(self):
-        """Дополнительно: самое старое животное"""
-        if hasattr(self.zoo, 'oldest_animal'):
-            oldest = self.zoo.oldest_animal()
-            self.assertEqual(oldest, self.elephant)
-        else:
-            self.skipTest("Метод oldest_animal не реализован")
-    
-    def test_total_age(self):
-        """Дополнительно: суммарный возраст"""
-        if hasattr(self.zoo, 'total_age'):
-            total = self.zoo.total_age()
-            self.assertEqual(total, 18)  # 5 + 10 + 3
-        else:
-            self.skipTest("Метод total_age не реализован")
-
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
+if queue:
+    print("Очередь не пуста")
 ```
+
+### Дополнительные задания
+
+1. **Метод clear()**: Очищает структуру данных
+2. **Метод contains(item)**: Проверяет наличие элемента (также реализовать `__contains__` для оператора `in`)
+3. **Ограничение размера**: Параметр `maxsize` в `__init__`. При превышении — `OverflowError`
+
+### Полезные ссылки для изучения
+- "Python __len__ __bool__ magic methods"
+- "Python __iter__ iterator protocol"
+- "Stack data structure"
+- "Queue data structure FIFO"
 
 ---
 
-## Задача 7: Свойства (Properties) — Термостат
+### Файл тестов: `test_data_structures.py`
+
+
+
+---
+
+## Задача 8: Система логирования (Декораторы классов)
 
 ### Уровень сложности: 7/10
 
 ### Изучаемые концепции
-- Декоратор `@property`
-- Геттеры и сеттеры
-- Валидация при присваивании
-- Вычисляемые свойства
-- Приватные атрибуты (`__`)
+- Декораторы
+- Работа с датой и временем
+- Паттерн Singleton
+- Уровни логирования
 
-### Подробное условие
+### Условие
 
-Создайте класс `Thermostat`, представляющий умный термостат.
+Создайте систему логирования с классом `Logger`.
 
-**Технические требования:**
+**Класс Logger (Singleton):**
+1. Реализует паттерн Singleton — только один экземпляр класса
+2. Метод `__init__` принимает необязательный `filename` (если указан — логи пишутся в файл)
+3. Уровни логирования: DEBUG, INFO, WARNING, ERROR, CRITICAL (в виде констант класса или Enum)
+4. Метод `set_level(level)` устанавливает минимальный уровень логирования
+5. Методы `debug(message)`, `info(message)`, `warning(message)`, `error(message)`, `critical(message)`
+6. Формат записи: `"[УРОВЕНЬ] YYYY-MM-DD HH:MM:SS - сообщение"`
+7. Метод `get_logs()` возвращает список всех записей
+8. Метод `get_logs_by_level(level)` фильтрует записи по уровню
 
-1. **Приватный атрибут** `__temperature` для хранения температуры в Цельсиях
+**Декоратор @log_calls:**
+1. Создайте декоратор `log_calls`, который логирует вызовы функций/методов
+2. Логирует: имя функции, аргументы, результат, время выполнения
 
-2. **Свойство `celsius`:**
-   - Геттер возвращает температуру в Цельсиях
-   - Сеттер устанавливает температуру с валидацией: допустимый диапазон от -50 до 50 градусов (иначе `ValueError`)
-
-3. **Свойство `fahrenheit`:**
-   - Геттер возвращает температуру в Фаренгейтах (формула: `C * 9/5 + 32`)
-   - Сеттер принимает температуру в Фаренгейтах и конвертирует в Цельсии (формула: `(F - 32) * 5/9`)
-
-4. **Свойство `kelvin`:**
-   - Только для чтения (только геттер)
-   - Формула: `C + 273.15`
-
-5. **Метод `is_comfortable()`:**
-   - Возвращает `True`, если температура в диапазоне 18-25°C
-
-6. **Метод `adjust(delta)`:**
-   - Изменяет температуру на `delta` градусов с проверкой диапазона
-
-**Файл для решения:** `thermostat.py`
+**Файл для сдачи:** `logger.py`
 
 ### Примеры использования
 
 ```python
-# Пример 1: Базовая работа со свойствами
-t = Thermostat(20)
-print(t.celsius)      # 20
-print(t.fahrenheit)   # 68.0
+# Singleton
+logger1 = Logger()
+logger2 = Logger()
+print(logger1 is logger2)  # True
+
+# Логирование
+logger = Logger()
+logger.set_level(Logger.INFO)
+logger.debug("Это не выведется")  # уровень ниже INFO
+logger.info("Информация")
+logger.warning("Предупреждение")
+logger.error("Ошибка")
+
+for log in logger.get_logs():
+    print(log)
+
+# Декоратор
+@log_calls
+def add(a, b):
+    return a + b
+
+result = add(2, 3)  # Логирует вызов
+```
+
+### Дополнительные задания
+
+1. **Запись в файл**: Полная реализация записи в файл
+2. **Форматтер**: Метод `set_format(format_string)` для настройки формата вывода
+3. **Контекстный менеджер**: Реализовать `__enter__`/`__exit__` для временного изменения уровня
+
+### Полезные ссылки для изучения
+- "Python singleton pattern"
+- "Python datetime strftime"
+- "Python decorator with arguments"
+- "Python Enum class"
+
+---
+
+### Файл тестов: `test_logger.py`
+
+
+
+## Задача 9: Интернет-магазин (Комплексная система)
+
+### Уровень сложности: 8/10
+
+### Изучаемые концепции
+- Комплексное взаимодействие множества классов
+- Агрегация и композиция
+- Управление состоянием
+- Бизнес-логика в методах
+- Исключения для бизнес-правил
+
+### Условие
+
+Создайте систему интернет-магазина с несколькими взаимосвязанными классами.
+
+**Класс Product:**
+1. Метод `__init__` принимает: `product_id`, `name`, `price`, `quantity` (количество на складе)
+2. Все параметры валидируются (price > 0, quantity >= 0)
+3. Метод `is_available(amount=1)` проверяет, доступно ли указанное количество
+4. Метод `reduce_stock(amount)` уменьшает количество на складе
+5. Метод `restock(amount)` пополняет склад
+6. Метод `__str__` возвращает информацию о товаре
+
+**Класс CartItem:**
+1. Связывает Product с количеством в корзине
+2. Метод `__init__` принимает `product` и `quantity`
+3. Метод `get_total()` возвращает стоимость (цена × количество)
+4. Метод `update_quantity(new_quantity)` изменяет количество
+
+**Класс ShoppingCart:**
+1. Метод `add_item(product, quantity)` добавляет товар в корзину. Если товар уже есть — увеличивает количество
+2. Метод `remove_item(product_id)` удаляет товар из корзины
+3. Метод `update_item_quantity(product_id, quantity)` изменяет количество товара
+4. Метод `get_total()` возвращает общую стоимость корзины
+5. Метод `get_items()` возвращает список CartItem
+6. Метод `clear()` очищает корзину
+7. `__len__` возвращает количество уникальных товаров
+
+**Класс Order:**
+1. Метод `__init__` принимает `order_id`, `cart` (ShoppingCart), `customer_name`
+2. Статусы заказа: PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED
+3. Метод `confirm()` подтверждает заказ и списывает товары со склада
+4. Метод `cancel()` отменяет заказ (если не SHIPPED/DELIVERED) и возвращает товары на склад
+5. Метод `ship()` отправляет заказ (только из статуса CONFIRMED)
+6. Метод `deliver()` доставляет заказ (только из статуса SHIPPED)
+7. Метод `get_total()` возвращает сумму заказа
+
+**Класс Store:**
+1. Управляет товарами и заказами
+2. Метод `add_product(product)` добавляет товар в каталог
+3. Метод `get_product(product_id)` возвращает товар по ID
+4. Метод `create_order(cart, customer_name)` создаёт заказ
+5. Метод `get_order(order_id)` возвращает заказ
+6. Метод `get_available_products()` возвращает товары в наличии
+
+**Файл для сдачи:** `shop.py`
+
+### Примеры использования
+
+```python
+# Создание магазина и товаров
+store = Store("TechShop")
+laptop = Product("P001", "Ноутбук", 50000, 10)
+mouse = Product("P002", "Мышь", 1500, 50)
+store.add_product(laptop)
+store.add_product(mouse)
+
+# Корзина покупателя
+cart = ShoppingCart()
+cart.add_item(laptop, 2)
+cart.add_item(mouse, 3)
+print(cart.get_total())  # 104500
+
+# Оформление заказа
+order = store.create_order(cart, "Иван Петров")
+order.confirm()  # Списывает товары со склада
+print(laptop.quantity)  # 8
+
+order.ship()
+order.deliver()
+print(order.status)  # DELIVERED
+```
+
+### Дополнительные задания
+
+1. **Скидки**: Класс `Discount` с методами применения скидки (процент или фиксированная сумма). Метод `apply_discount(discount)` в Cart
+2. **История заказов**: Метод `get_order_history(customer_name)` в Store
+3. **Уведомления**: Метод `subscribe(callback)` в Order, вызывающий callback при смене статуса
+
+### Полезные ссылки для изучения
+- "Python enum for status"
+- "Python aggregation vs composition"
+- "State pattern Python"
+- "Python callback functions"
+
+---
+
+### Файл тестов: `test_shop.py`
+
+---
+
+## Задача 10: ORM-подобная система (Дескрипторы и метаклассы)
+
+### Уровень сложности: 10/10
+
+### Изучаемые концепции
+- Дескрипторы (`__get__`, `__set__`, `__delete__`)
+- Метаклассы (опционально)
+- Валидация на уровне атрибутов
+- Паттерн Active Record
+- Сериализация/десериализация
+
+### Условие
+
+Создайте упрощённую ORM-подобную систему для работы с "моделями" данных.
+
+**Дескрипторы-валидаторы (классы полей):**
+
+1. **Field** — базовый класс дескриптора:
+   - Параметры: `required` (обязательное, по умолчанию True), `default` (значение по умолчанию)
+   - Метод `validate(value)` — базовая валидация (проверка на None если required)
+
+2. **StringField(Field)**:
+   - Дополнительные параметры: `min_length`, `max_length`
+   - Проверяет, что значение — строка нужной длины
+
+3. **IntegerField(Field)**:
+   - Дополнительные параметры: `min_value`, `max_value`
+   - Проверяет, что значение — целое число в диапазоне
+
+4. **EmailField(StringField)**:
+   - Проверяет формат email (содержит @ и точку после @)
+
+5. **BooleanField(Field)**:
+   - Проверяет, что значение — булево
+
+**Класс Model:**
+1. Базовый класс для всех моделей
+2. При создании экземпляра принимает именованные аргументы для полей
+3. Метод `validate()` проверяет все поля и возвращает список ошибок (или пустой список)
+4. Метод `is_valid()` возвращает True, если валидация прошла
+5. Метод `to_dict()` сериализует модель в словарь
+6. Класс-метод `from_dict(data)` создаёт экземпляр из словаря
+7. Метод `__str__` возвращает читаемое представление
+8. Метод `__eq__` сравнивает модели по значениям полей
+
+**Файл для сдачи:** `orm.py`
+
+### Примеры использования
+
+```python
+class User(Model):
+    username = StringField(min_length=3, max_length=20)
+    email = EmailField()
+    age = IntegerField(min_value=0, max_value=150, required=False, default=None)
+    is_active = BooleanField(default=True)
+
+
+# Создание пользователя
+user = User(username="john_doe", email="john@example.com", age=25)
+print(user.username)  # john_doe
+print(user.is_valid())  # True
+
+# Валидация
+invalid_user = User(username="ab", email="invalid-email")
+print(invalid_user.is_valid())  # False
+errors = invalid_user.validate()
+print(errors)  # ['username: минимальная длина 3', 'email: неверный формат']
+
+# Сериализация
+data = user.to_dict()
+print(data)  # {'username': 'john_doe', 'email': 'john@example.com', 'age': 25, 'is_active': True}
+
+# Десериализация
+user2 = User.from_dict(data)
+print(user == user2)  # True
+```
+
+### Дополнительные задания
+
+1. **ListField**: Поле для списка с валидацией типа элементов
+2. **DateField**: Поле для даты с форматом
+3. **Вложенные модели**: Возможность использовать Model как тип поля (ForeignKey-подобное поведение)
+
+### Полезные ссылки для изучения
+- "Python descriptors __get__ __set__"
+- "Python descriptor protocol"
+- "Python metaclass"
+- "Active Record pattern"
+- "Python ORM design"
+
+---
+
+### Файл тестов: `test_orm.py`
+
+---
+
+## Сводная таблица задач
+
+| № | Название | Сложность | Основные концепции |
+|---|----------|-----------|-------------------|
+| 1 | Счётчик | 1/10 | Классы, `__init__`, атрибуты, методы |
+| 2 | Прямоугольник | 2/10 | Валидация, `__str__`, вычисляемые свойства |
+| 3 | Банковский счёт | 3/10 | Инкапсуляция, защищённые атрибуты |
+| 4 | Книга и Библиотека | 4/10 | Композиция, коллекции объектов |
+| 5 | Геометрические фигуры | 5/10 | Наследование, `super()`, переопределение |
+| 6 | Система сотрудников | 6/10 | Полиморфизм, разное поведение подклассов |
+| 7 | Стек и Очередь | 6/10 | Структуры данных, `__len__`, `__iter__` |
+| 8 | Система логирования | 7/10 | Singleton, декораторы, уровни |
+| 9 | Интернет-магазин | 8/10 | Комплексная система, состояния, бизнес-логика |
+| 10 | ORM-система | 10/10 | Дескрипторы, метаклассы, валидация |

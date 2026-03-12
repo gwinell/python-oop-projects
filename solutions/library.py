@@ -52,23 +52,3 @@ class Library:
                 raise ValueError("Книга не была выдана")
         raise KeyError("Книга не найдена")
 
-book1 = Book("Война и мир", "Лев Толстой", 1869, "978-5-17-090000-1")
-book2 = Book("Анна Каренина", "Лев Толстой", 1877, "978-5-17-090000-2")
-book3 = Book("Преступление и наказание", "Фёдор Достоевский", 1866, "978-5-17-090000-3")
-
-library = Library()
-library.add_book(book1)
-library.add_book(book2)
-library.add_book(book3)
-
-tolstoy_books = library.find_by_author("Толстой")  # [book1, book2]
-war_books = library.find_by_title("война")          # [book1]
-
-print(library.collection)
-library.borrow_book("978-5-17-090000-1")
-available = library.get_available_books()
-print(library.collection)# [book2, book3]
-library.return_book("978-5-17-090000-1")
-
-print(tolstoy_books)
-print(war_books)
